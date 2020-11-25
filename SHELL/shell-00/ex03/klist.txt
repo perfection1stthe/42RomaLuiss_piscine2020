@@ -1,0 +1,5 @@
+Credentials cache: API:87A92F09-4D65-4856-B97E-13536C0179D6
+        Principal: mtraball@42ROMA.IT
+
+  Issued                Expires               Principal
+Oct 26 12:41:54 2020  Oct 26 22:41:54 2020  krbtgt/42ROMA.IT@42ROMA.IT

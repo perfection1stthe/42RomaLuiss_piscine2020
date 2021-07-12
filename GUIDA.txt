@@ -1,0 +1,239 @@
+////////  **** COMANDI DOCKERFILE DA SHELL ****  ////////
+
+- Creare il DOCKERFILE
+ . vim dockerfile 
+    
+    dockerfile e' uno strumento per automatizzare i processi.
+
+ . Al suo interno inserire:
+
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Dockerfile                                         :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: dseptar <marvin@42.fr>                     +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2021/03/01 14:45:21 by dseptar           #+#    #+#              #
+#    Updated: 2021/03/02 14:19:27 by dseptar          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+FROM	debian:buster
+
+FROM e' il S.O. (sistema operativo), noi in questo
+progetto usiamo Debian10.
+
+CMD		bash
+
+Tale comando serve a mantenere aperto la root e ad avere i
+permessi di eseguibilita'.
+
+
+////////  COMANDI DOCKERFILE DA SHELL ////////
+
+- docker build --tag nome immagine .
+
+Tale comando genera il file immagine del S.O.
+
+- docker run -it -d -p 80:80 nome immagine
+
+Tale comando installa il S.O. e la tiene accesa (-it -d) con accesso ad esso
+tramite la porta (-p 80:80).
+
+- docker ps -a
+
+Tale comando ti mostra la lista dei container creati e le sue info,
+tra cui il NOME che ci servira' in seguito.
+
+- docker exec -it NOME bash
+
+Tale comando ci permette di accedere al nosto S.O.
+
+
+////////  COMANDI INSTALLAZIONE SERVER ////////
+
+- apt update
+
+Comando per aggiornare il docker, cosí da avere accesso ai pacchetti (librerie)
+da installare in seguito nel nostro S.O.
+
+- apt install nginx
+
+Tale comando serve ad installare il nostro web SERVER.
+
+- service nginx start
+
+Comando per avviare il nostro SERVER.
+
+////////  COMANDI INSTALLAZIONE DATABASE ////////
+
+- apt install mariadb-server
+
+Tale comando serve ad installare il pacchetto database nel nostro S.O.
+"pacchetto database" sono tutti gli strumenti che ci serviranno per poi
+creare il nostro database.
+
+- service mysql start
+
+Comando per attivare il database.
+
+- mariadb
+
+Comando per accedere all'ambiente dei database.
+
+////////  COMANDI DA ESEGUIRE ALL'INTERNO DI MARIADB ////////
+
+- CREATE DATABASE nome;
+
+Comando per creare il nostro database.
+
+- GRANT ALL ON nome.* TO 'nome user'@'localhost' IDENTIFIED BY 'password' WITH GRANT OPTION;
+
+Tale comando crea e da i privilegi da admin all'utente appena creato.
+
+- FLUSH PRIVILEGES;
+
+Comando per salvare i privilegi.
+
+- EXIT
+
+Uscire da mariadb.
+
+////////  COMANDI DA ESEGUIRE AL DI FUORI DI MARIADB ////////
+
+-mariadb -u nomeuser -p 
+
+Comando che verica l'esistenza dell'utente precedentemente creato.
+Inserendo la password da noi scelta accederemo nuovamente a mariadb.
+
+- SHOW DATABASES;
+
+Comando che mostrerá il nostro database appena creato.
+
+- EXIT
+
+Uscire da mariadb.
+
+////////  COMANDI INSTALLAZIONE PHP ////////
+
+- apt install php-fpm php-mysql
+
+Tale comando installa dentro il nostro S.O. l'ambiente dove andrá installato e creato il nostro sito web.
+
+- chown -R $user:$user var/www/html/
+
+Comando che serve a dare i permessi di lettura/scrittura ecc. al nostro user appena creato. Cosí facendo possiamo
+dare inizio alla creazione del nostro sito web.
+
+- apt install vim
+
+Installiamo vim nel nostro S.O. ci servirá per modificare determinati documenti.
+
+- apt install php-mbstring php-json php-zip php-gd php-xml
+
+Pacchetti da installare necessari per gestire PHPMYADMIN.
+
+- service php7.3-fpm reload
+- serice nginx reload
+
+Comandi per riavviare php e nginx ed aggiornare le modifiche.
+
+- ap install wget
+
+Pacchetto da installare per poter riconoscere i link da scaricare e scaricarli.
+
+- wget link pacchetto PHPMYADMIN
+
+Scarichiamo PHPMYADMIN, che servirá in seguito a visualizzare su di una pagina web il nostro database, e poterci lavorare.
+
+- tar -xzvf file appena scaricato
+
+Scompatta il precedentemente scaricato.
+
+- mv file appena scompattato var/www/html/
+
+Spostiamo la cartella PHPMYADMIN dentro la cartella dove ostiamo il nostro sito web.
+
+- cd var/www/html/cartella PHPMYADMIN
+
+Spostiamoci nella cartella di PHPMYADMIN.
+
+- vim config.inc.php
+
+Creiamo all'interno della cartella una file di configurazuone.
+
+- service php7.3-fpm reload
+- serice nginx reload
+
+Comandi per riavviare php e nginx ed aggiornare le modifiche.
+
+////////  COMANDI INSTALLAZIONE WORDPRESS ////////
+
+- mariadb 
+
+Entriamo nel nostro ambiente dei database.
+
+- CREATE DATABASE nome;
+
+Creiamo il database che servirá per WORDPRESS.
+
+- GRANT ALL ON nome.* TO 'wordpress user'@'localhost' IDENTIFIED BY 'password' WITH GRANT OPTION;
+
+Comando per creare e dare i privilegi anche al nuovo database di wordpress.
+
+- FLUSH PRIVILEGES;
+
+Comando per salvare i privilegi.
+
+- EXIT
+
+Usciamo da mariadb.
+
+- wget link pacchetto wordpress
+
+Scarichiamo il pacchetto wordpress dal sito.
+
+- tar -xzvf file appena scaricato
+
+Scompattiamo il file.
+
+- mv file scaricato var/www/html/
+
+Spostiamo la cartella wordpress nel nostro ambiente.
+
+- chown -R www-data:www-data var/www/html/wordpress
+
+Diamo i permessi alla cartella di wordpress.
+
+- cd var/www/html/wordpress
+
+Ci spostiamo al suo interno.
+
+- vim wp-config.php
+
+File di configurazione da inserire all'interno di wordpress.
+
+*** PROMEMORIA ***
+
+RICORDARSI DI CAMBIARE DB_USER E DB_PASSWORD NEL FILE DI CONFIGURAZIONE DI WORDPRESS, CON QUELLI
+CREATI E CONFIGURATI DA NOI.
+
+******************
+
+////////  COMANDI INSTALLAZIONE SSL KEY ////////
+
+- mkdir etc/nginx/ssl
+
+Creiamo la cartella dove salveremo le nostre key.
+
+- openssl req -newkey rsa:4096 -x509 -sha256 -nodes -out /etc/nginx/ssl/html.pem -keyout /etc/nginx/ssl/html.key -subj "/C=IT/ST=Rome/L=Rome/O=42 School/OU=ds42@gmail.com/CN=localhost"
+
+Comando che serve per creare e salvare la nostra key.
+
+- service php7.3-fpm reload
+- serice nginx reload
+
+Comandi per riavviare php e nginx ed aggiornare le modifiche.
+
+////////  FINE ////////
